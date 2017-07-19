@@ -7,6 +7,7 @@
 * Double click support
 * All square textures are rendered at runtime thus performance is fair due to use <b>sf::VertexArray</b> (even with 500^2 tiles)
 * No recursion when reveal many empty tiles (stack overflow impossible on huge maps)
+* Model View Controller
 
 Project is still incomplete. All todos can be found <a href="https://github.com/malciin/minesweeper/projects/3">here</a>.
 

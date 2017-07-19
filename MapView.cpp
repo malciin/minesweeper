@@ -1,7 +1,6 @@
 #include "MapView.hpp"
 MapView::MapView() : focusBuffor(10)
 {
-	mouseCount = 0;
 	squares.setPrimitiveType(sf::PrimitiveType::Quads);
 	font.loadFromFile("ubuntu.ttf");
 }
@@ -156,21 +155,11 @@ void MapView::reload()
 			quad[2].position = sf::Vector2f((x + 1)*squareSize + x*margin, (y + 1)*squareSize + y*margin);
 			quad[3].position = sf::Vector2f(x*squareSize + x*margin, (y + 1)*squareSize + y*margin);
 		}
-
-	/*
-	for (int y = 0; y < mapHandler->getSizeY(); y++)
-		for (int x = 0; x < mapHandler->getSizeX(); x++)
-			updateTile(y, x);
-	*/
-}
-void MapView::updateTile(int y, int x)
-{
-	setColor(y, x);
-	setTexture(y, x);
 }
 void MapView::notify(int y, int x)
 {
-	updateTile(y, x);
+	setColor(y, x);
+	setTexture(y, x);
 }
 
 
@@ -178,4 +167,23 @@ void MapView::draw(sf::RenderTarget &target, sf::RenderStates states) const
 {
 	states.texture = &textures;
 	target.draw(squares, states);
+}
+
+void MapView::removeFocus()
+{
+	for (int i = 0; i < focusBuffor.getSize(); i++)
+	{
+		setColor(focusBuffor[i].y, focusBuffor[i].x);
+	}
+	focusBuffor.drop();
+}
+
+void MapView::addFocus()
+{
+	sf::Vertex * quad;
+	for (int i = 0, n = focusBuffor.getSize(); i < n; i++)
+	{
+		sf::Vector2i pos = focusBuffor[i];
+		setColor(pos.y, pos.x, sf::Color(mainColor.r, mainColor.g, mainColor.b, 128));
+	}
 }

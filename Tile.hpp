@@ -1,13 +1,14 @@
 #pragma once
 #include <stdexcept>
-
+#include <iostream>
 class Tile
 {
-	// Value of title. Represent number of mines around
-	// or -1, if that tile is a mine.
-	int value;
-	int status;
-	int additional;
+	
+	int value;			// Value of tile. Represent number of mines around
+						// or -1, if that tile is a mine.
+	int status;			// Status of tile. Represent if a tile is hidden, marked or revealed
+	int additional;		// Addtional status of tile. Represent if marked is correct or wrong 
+						// (obviously if tile is marked)
 public:
 	Tile()
 	{
@@ -28,14 +29,10 @@ public:
 	};
 	enum MarkStatus
 	{
-		WRONG_MARK = 1,
+		NOTHING,
+		WRONG_MARK,
 		CORRECT_MARK
 	};
-
-	bool isMine() const
-	{
-		return value == -1;
-	}
 
 	void setValue(int value)
 	{
@@ -43,12 +40,10 @@ public:
 			throw std::invalid_argument("Value must be from range [-2; 8]");
 		this->value = value;
 	}
-
 	void setStatus(Status status)
 	{
 		this->status = status;
 	}
-
 	void setMarkStatus(MarkStatus status)
 	{
 		additional = status;
@@ -62,7 +57,6 @@ public:
 	{
 		return static_cast<MarkStatus>(additional);
 	}
-
 	int getValue()
 	{
 		return value;

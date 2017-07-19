@@ -2,6 +2,9 @@
 #include <exception>
 #include <stdexcept>
 #include <memory>
+
+
+// FROM https://github.com/malciin/nov
 template <typename Type>
 class Buffor
 {

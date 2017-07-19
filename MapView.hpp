@@ -8,79 +8,94 @@ class MapView : public IMapView, public sf::Drawable
 
 	sf::VertexArray squares;
 	sf::Color mainColor;
-	sf::Font font;
-
+	
 	int squareSize;
 	int margin;
 
-	virtual void draw(sf::RenderTarget &target, sf::RenderStates states) const;
-
+	sf::Font font;
 	sf::Texture textures;
-
-	void setColor(int y, int x, sf::Color color);
-	void setColor(int y, int x);
-	void setTexture(int y, int x);
-
-	void updateTile(int y, int x);
-
-	Buffor<sf::Vector2i> focusBuffor;
-	void removeFocus();
-	void addFocus();
-
-	int mouseCount;
-	enum mouseCount {
-		LPM = 1,
-		PPM,
-		LPM_PPM,
-		BLOCKED
-	};
-public:
-	MapView();
 	void renderTextures();
 
-	void setMarginBetweenSquares(int size)
-	{
-		margin = size;
-	}
+	void setColor(int y, int x, sf::Color color);	// Set tile color	
+	void setColor(int y, int x);					// Set the tile colors to default	
+													// (you can set all tiles colors here)
+	void setTexture(int y, int x);					// Set the tile texture
+													// Here's mapped number textures to proper map value
+	Buffor<sf::Vector2i> focusBuffor;				// Buffor needed to preceed focus on the tiles
 
-	void setSquareSize(int size)
-	{
-		if (size > 300)
-			throw std::logic_error("Square size cannot be more that 300px!");
-		squareSize = size;
-		renderTextures();
-	}
+	virtual void draw(sf::RenderTarget &target, sf::RenderStates states) const;
+public:
+	MapView();
+	void handleMap(Map * map);						// set the mapHandler pointer
 
-	void handleMap(Map * map)
-	{
-		mapHandler = map;
-	}
+	// IMapView
+	virtual void notify(int y, int x);				// Update tile (check IMapView description for more)
+	virtual void reload();							// Reloading view (check IMapView description for more)
+	///...................
 
-	int getSizeX()
-	{
-		return (squareSize + margin) * mapHandler->getSizeX() - margin;
-	}
-	int getSizeY()
-	{
-		return (squareSize + margin) * mapHandler->getSizeY() - margin;
-	}
+	void setMarginBetweenSquares(int size);			// set the margin between the squares
+	void setSquareSize(int size);					// set the square size
 
-	void setMainColor(sf::Color color)
-	{
-		mainColor = color;
-	}
+	void setMainColor(sf::Color color);
 
-	void preceedMouse(sf::Vector2i clickPos, sf::Event & event);
-	void continiousMouse(sf::Vector2i pos);
+	// Getters
+	int getSquareSize();
+	int getMargin();
+	int getSizeX();
+	int getSizeY();
+	///...................
 
-	virtual void notify(int y, int x);
-	virtual void reload();
-	int getSquareSize()
-	{
-		return squareSize;
-	}
-	int getMarginBetweenSquares()
-	{
-		return margin;
-	}
+	// Focus methods (called from MapController)
+	void removeFocus();
+	void addFocus();
+	void addToFocusBuffor(const sf::Vector2i & vector);
 };
+
+
+
+
+// INLINE METHODS
+///..............
+
+inline void MapView::setMarginBetweenSquares(int size)
+{
+	margin = size;
+}
+
+inline void MapView::setSquareSize(int size)
+{
+	if (size > 300)
+		throw std::logic_error("Square size cannot be more that 300px!");
+	squareSize = size;
+	renderTextures();
+}
+
+inline void MapView::handleMap(Map * map)
+{
+	mapHandler = map;
+}
+
+inline int MapView::getSizeX()
+{
+	return (squareSize + margin) * mapHandler->getSizeX() - margin;
+}
+inline int MapView::getSizeY()
+{
+	return (squareSize + margin) * mapHandler->getSizeY() - margin;
+}
+inline void MapView::setMainColor(sf::Color color)
+{
+	mainColor = color;
+}
+inline int MapView::getSquareSize()
+{
+	return squareSize;
+}
+inline int MapView::getMargin()
+{
+	return margin;
+}
+inline void MapView::addToFocusBuffor(const sf::Vector2i & vector)
+{
+	focusBuffor.push(vector);
+}
