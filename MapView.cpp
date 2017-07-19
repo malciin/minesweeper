@@ -1,4 +1,4 @@
-#include "MapView.h"
+#include "MapView.hpp"
 MapView::MapView() : focusBuffor(10)
 {
 	mouseCount = 0;

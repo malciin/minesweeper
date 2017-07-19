@@ -87,7 +87,7 @@ public:
 			throw std::out_of_range("Queue full. Cannot add more elements!");
 	}
 
-	// remove item from buffor and return it
+	// remove item from buffor and return it O(1)
 	Type pop()
 	{
 		if (queued > 0)
@@ -103,7 +103,7 @@ public:
 			throw std::out_of_range("Queue empty. Cannot pop more elements!");
 	}
 
-	// remove whole buffor
+	// remove whole buffor O(1)
 	inline void drop()
 	{
 		indexIn = 0;
@@ -126,6 +126,8 @@ public:
 	{
 		return maxSize;
 	}
+
+	// return nth element O(1)
 
 	Type & operator[](unsigned int Index) const
 	{

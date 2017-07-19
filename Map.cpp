@@ -1,8 +1,10 @@
-#include "Map.h"
-#include <sstream>
+#include "Map.hpp"
+#include <sstream>	// toString
+
+#include <iomanip>	// toString
+#include <set>		// revealIterative
+
 // PUBLIC METHODS:
-#include <iostream>
-#include <iomanip>
 Map::Map(int sizeY, int sizeX, int mines)
 {
 	this->sizeX = sizeX;
@@ -71,7 +73,7 @@ void Map::reveal(int y, int x)
 	{
 		if (map[y][x] == 0)
 		{
-			revealRecursive(y, x);
+			revealIterative(y, x);
 			checkWin();
 			if (isWin())
 				revealAllBombs();
@@ -99,29 +101,34 @@ void Map::reveal(int y, int x)
 	}
 }
 
-void Map::revealRecursive(int y, int x)
+void Map::revealIterative(int y, int x)
 {
-	if (map[y][x] == 0 && map[y][x].getStatus()!=Tile::MARKED)
+	typedef std::pair<int, int> vector;
+	std::set<vector> points;
+	points.insert(vector(y, x));
+	while (!points.empty())
 	{
-		hiddenTiles--;
+		vector actual = *points.begin();
+		int y = actual.first;
+		int x = actual.second;
+		points.erase(points.begin());
+		
+		if (map[y][x].getStatus() == Tile::MARKED)
+			continue;
 		setStatus(y, x, Tile::REVEALED);
-
-		if (map[y - 1][x].getStatus() != Tile::REVEALED && map[y - 1][x] != -2)
-			revealRecursive(y - 1, x);
-
-		if (map[y + 1][x].getStatus() != Tile::REVEALED && map[y + 1][x] != -2)
-			revealRecursive(y + 1, x);
-
-		if (map[y][x - 1].getStatus() != Tile::REVEALED && map[y][x - 1] != -2)
-			revealRecursive(y, x - 1);
-
-		if (map[y][x + 1].getStatus() != Tile::REVEALED && map[y][x + 1] != -2)
-			revealRecursive(y, x + 1);
-	}
-	else if (map[y][x] != Tile::BORDER && map[y][x].getStatus() != Tile::MARKED)
-	{
 		hiddenTiles--;
-		setStatus(y, x, Tile::REVEALED);
+
+		if (map[y][x].getValue() == 0)
+		{
+			for (int yDelta = -1; yDelta < 2; yDelta += 2)
+				if (map[y + yDelta][x].getStatus() != Tile::REVEALED && map[y + yDelta][x] != Tile::BORDER)
+					points.insert(vector(y + yDelta, x));
+
+			for (int xDelta = -1; xDelta < 2; xDelta += 2)
+				if (map[y][x + xDelta].getStatus() != Tile::REVEALED && map[y][x + xDelta] != Tile::BORDER)
+					points.insert(vector(y, x + xDelta));
+		}
+		
 	}
 }
 

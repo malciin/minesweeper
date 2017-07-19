@@ -1,5 +1,5 @@
 #pragma once
-#include "Tile.h"
+#include "Tile.hpp"
 #include <vector>
 #include <string>
 class IMapView
@@ -27,7 +27,7 @@ class Map
 		win = (hiddenTiles == mineTiles) && !lose;
 	}
 
-	void revealRecursive(int y, int x);
+	void revealIterative(int y, int x);
 	void setStatus(int y, int x, Tile::Status status)
 	{
 		if (y < 1 || x < 1 || x > sizeX + 1 || y > sizeY + 1)

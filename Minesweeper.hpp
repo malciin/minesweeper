@@ -1,6 +1,7 @@
 #pragma once
-#include "Map.h"
-#include "MapView.h"
+#include "Map.hpp"
+#include "MapView.hpp"
+
 class Minesweeper
 {
 	sf::RenderWindow * window;
@@ -9,11 +10,11 @@ class Minesweeper
 
 	sf::Mouse mouse;
 public:
-	Minesweeper() : map(10,10, 10)
+	Minesweeper() : map(200,200, 10)
 	{
 		mapView.handleMap(&map);
 		mapView.setMarginBetweenSquares(1);
-		mapView.setSquareSize(25);
+		mapView.setSquareSize(3);
 		mapView.setMainColor(sf::Color::Blue);
 		mapView.reload();
 

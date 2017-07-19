@@ -1,5 +1,5 @@
-#include "MapView.h"
-#include <iostream>
+#include "MapView.hpp"
+
 void MapView::removeFocus()
 {
 	for (int i = 0; i < focusBuffor.getSize(); i++)

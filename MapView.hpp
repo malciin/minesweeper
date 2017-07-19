@@ -1,7 +1,7 @@
 #pragma once
-#include "Map.h"
 #include <SFML/Graphics.hpp>
-#include "Buffor.h"
+#include "Map.hpp"
+#include "Buffor.hpp"
 class MapView : public IMapView, public sf::Drawable
 {
 	Map * mapHandler;
@@ -36,7 +36,6 @@ class MapView : public IMapView, public sf::Drawable
 	};
 public:
 	MapView();
-
 	void renderTextures();
 
 	void setMarginBetweenSquares(int size)
@@ -73,6 +72,15 @@ public:
 
 	void preceedMouse(sf::Vector2i clickPos, sf::Event & event);
 	void continiousMouse(sf::Vector2i pos);
+
 	virtual void notify(int y, int x);
 	virtual void reload();
+	int getSquareSize()
+	{
+		return squareSize;
+	}
+	int getMarginBetweenSquares()
+	{
+		return margin;
+	}
 };
