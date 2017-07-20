@@ -14,8 +14,11 @@ class MapController
 		LPM_PPM,			// Left and right mouse pressed
 		BLOCKED				// Special case after LPM_PPM - both must be released
 	};
+
+	bool mouseDeltaActive;
+	int mouseDelta;
 public:
-	MapController() { mouseCount = 0; }
+	MapController() { mouseCount = 0; mouseDelta = 20; mouseDeltaActive = false; }
 	void handleMap(Map * map)			// Handle the pointer to map
 	{
 		mapHandler = map;
@@ -24,8 +27,17 @@ public:
 	{
 		viewHandler = view;
 	}
+
+	int getNextMineNumber()
+	{
+		return mouseDelta;
+	}
+
+	// Hotkeys
+	void preceedKeyboard(const sf::Event & event);
+
 	// Perform action when mouse button is released base on the mouseCount
-	void preceedMouse(sf::Vector2i clickPos, sf::Event & event);
+	void preceedMouse(sf::Vector2i clickPos, const sf::Event & event);
 
 	// Set the mouseCount and notify viewHandler to display the focus
 	void continiousMouse(sf::Vector2i pos);

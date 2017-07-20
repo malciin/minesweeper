@@ -10,29 +10,10 @@ Map::Map(int sizeY, int sizeX, int mines)
 	this->sizeX = sizeX;
 	this->sizeY = sizeY;
 	mineTiles = mines;
-	markedTiles = 0;
-	hiddenTiles = sizeX * sizeY;
-	lose = false;
-	win = false;
 
 	map.resize(sizeY + 2);
 	for (int y = 0; y < sizeY + 2; y++)
 		map[y].resize(sizeX + 2);
-
-	// Setting horizontal border
-	for (int y = 0; y < 2; y++)
-		for (int x = 0; x < sizeX + 2; x++)
-		{
-			map[y*(sizeY + 1)][x].setValue(Tile::BORDER);
-		}
-			
-
-	// Setting vertical border
-	for (int y = 0; y < sizeY + 2; y++)
-		for (int x = 0; x < 2; x++)
-		{
-			map[y][x*(sizeX + 1)].setValue(Tile::BORDER);
-		}
 			
 
 	generateMap();
@@ -43,6 +24,27 @@ void Map::generateMap(int seed)
 	srand(seed);
 	markedTiles = 0;
 	hiddenTiles = sizeX * sizeY;
+
+	lose = false;
+	win = false;
+
+	// Setting horizontal border
+	for (int y = 0; y < 2; y++)
+		for (int x = 0; x < sizeX + 2; x++)
+		{
+			map[y*(sizeY + 1)][x].setValue(Tile::BORDER);
+		}
+	// Setting vertical border
+	for (int y = 0; y < sizeY + 2; y++)
+		for (int x = 0; x < 2; x++)
+		{
+			map[y][x*(sizeX + 1)].setValue(Tile::BORDER);
+		}
+
+	for (int y = 1; y < sizeY + 1; y++)
+		for (int x = 1; x < sizeX + 1; x++)
+			map[y][x].setValue(0);
+
 
 	// Place bombs
 	int bombsPlaced = 0;
@@ -63,8 +65,8 @@ void Map::generateMap(int seed)
 		{
 			map[y][x].setValue(bombsAround(y, x));
 			map[y][x].setStatus(Tile::HIDDEN);
+			map[y][x].setMarkStatus(Tile::NOTHING);
 		}
-			
 }
 void Map::mark(int y, int x)
 {
@@ -92,6 +94,34 @@ void Map::mark(int y, int x)
 		map[y][x].setMarkStatus(Tile::NOTHING);
 		markedTiles--;
 	}
+}
+
+void Map::setSize(int y, int x, int bombs)
+{
+	sizeY = y;
+	sizeX = x;
+	mineTiles = bombs;
+
+	markedTiles = 0;
+	hiddenTiles = sizeX * sizeY;
+	lose = false;
+	win = false;
+
+	map.clear();
+	map.resize(sizeY + 2);
+	for (int y = 0; y < sizeY + 2; y++)
+		map[y].resize(sizeX + 2);
+	
+	generateMap();
+	view->reload();
+}
+
+void Map::setMineNumber(int number)
+{
+	mineTiles = number;
+	std::cout << "New mine tiles: " << mineTiles << " " << number << "\n";
+	generateMap();
+	view->reload();
 }
 
 void Map::reveal(int y, int x)

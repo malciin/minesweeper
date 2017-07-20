@@ -135,6 +135,7 @@ void MapView::setTexture(int y, int x)
 
 void MapView::reload()
 {
+	squares.clear();
 	squares.resize(4 * mapHandler->getSizeX()*mapHandler->getSizeY());
 
 	sf::Vertex * quad;

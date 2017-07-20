@@ -61,7 +61,8 @@ public:
 	int getSizeX();						// Return sizeX
 	int getSizeY();						// Return sizeY
 
-	
+	void setSize(int y, int x, int mineNumber);	// Change map size and number of bombs, regenrate map and call view reload
+	void setMineNumber(int number);
 
 	int getValue(int y, int x);			// Get value of tile (bombs around, or -1 if tile is a mine)
 	int getStatus(int y, int x);		// Get status of tile (if tile is hidden, marked or revealed)

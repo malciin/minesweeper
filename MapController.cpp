@@ -1,7 +1,16 @@
 #include "MapController.hpp"
 #include "MapView.hpp"
-void MapController::preceedMouse(sf::Vector2i clickPos, sf::Event & event)
+void MapController::preceedMouse(sf::Vector2i clickPos, const sf::Event & event)
 {
+	if (event.type == sf::Event::MouseWheelMoved)
+	{
+		if (!mouseDeltaActive)
+			mouseDeltaActive = true;
+		mouseDelta += event.mouseWheel.delta;
+		if (mouseDelta < 0)
+			mouseDelta = 0;
+		std::cout << "Next generated map will have " << mouseDelta << "mines!\n";
+	}
 	if (event.type == sf::Event::MouseButtonReleased)
 	{
 		if (mapHandler->isWin() || mapHandler->isLose())
@@ -93,4 +102,23 @@ void MapController::continiousMouse(sf::Vector2i pos)
 	// UNBLOCK
 	else if (mouseCount != 0)
 		mouseCount = 0;
+}
+
+
+void MapController::preceedKeyboard(const sf::Event & event)
+{
+	if (event.type == sf::Event::KeyReleased)
+	{
+		if (event.key.code == sf::Keyboard::Space)
+		{
+			if (mouseDeltaActive)
+			{
+				mapHandler->setMineNumber(mouseDelta);
+				std::cout << "Generated new!\n";
+				return;
+			}
+			mapHandler->generateMap();
+			viewHandler->reload();
+		}
+	}
 }
