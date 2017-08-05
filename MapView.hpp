@@ -16,11 +16,13 @@ class MapView : public IMapView, public sf::Drawable
 	sf::Texture textures;
 	void renderTextures();
 
-	void setColor(int y, int x, sf::Color color);	// Set tile color	
-	void setColor(int y, int x);					// Set the tile colors to default	
-													// (you can set all tiles colors here)
+	void setColor(int y, int x, sf::Color color);	// Set tile color to any color	
+	void setColor(int y, int x);					// Set the tile color based at current map status	
+													// (you can set all default tiles colors here)
+
 	void setTexture(int y, int x);					// Set the tile texture
 													// Here's mapped number textures to proper map value
+
 	Buffor<sf::Vector2i> focusBuffor;				// Buffor needed to preceed focus on the tiles
 
 	virtual void draw(sf::RenderTarget &target, sf::RenderStates states) const;

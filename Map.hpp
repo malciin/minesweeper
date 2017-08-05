@@ -2,6 +2,8 @@
 #include "Tile.hpp"
 #include <vector>
 #include <string>
+
+// View map interface
 class IMapView
 {
 public:
@@ -13,9 +15,7 @@ public:
 };
 
 /*
-
 	Main map class. This represent all map logic (generate minesweeper map, reveal tile, mark tile, double click reveal tile etc)
-
 */
 class Map
 {

@@ -1,13 +1,16 @@
 #include "MapView.hpp"
+// Constants that represent texture number that identified specific tile
+const int TILE_TEXTURES_COUNT = 12;
+const int MINE_TEXTURE_NUMBER = 9;
+const int GOOD_MARK_NUMBER = 10;
+const int WRONG_MARK_NUMBER = 11;
+
 MapView::MapView() : focusBuffor(10)
 {
 	squares.setPrimitiveType(sf::PrimitiveType::Quads);
 	font.loadFromFile("ubuntu.ttf");
 }
-const int TILE_TEXTURES_COUNT = 12;
-const int MINE_TEXTURE_NUMBER = 9;
-const int GOOD_MARK_NUMBER = 10;
-const int WRONG_MARK_NUMBER = 11;
+
 void MapView::renderTextures()
 {
 	sf::RenderTexture render;
