@@ -6,7 +6,10 @@ void MapController::preceedMouse(sf::Vector2i clickPos, const sf::Event & event)
 	{
 		if (!mouseDeltaActive)
 			mouseDeltaActive = true;
-		mouseDelta += event.mouseWheel.delta;
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::LControl))
+			mouseDelta += event.mouseWheel.delta * 25;
+		else
+			mouseDelta += event.mouseWheel.delta;
 		if (mouseDelta < 0)
 			mouseDelta = 0;
 		if (mouseDelta > mapHandler->getMineUpperbound())

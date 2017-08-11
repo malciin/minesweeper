@@ -15,6 +15,14 @@
 
 > **Mouse wheel** - change next generated map mine number
 
+> **CTRL + Mouse wheel** - change next generated map mine number by 25
+
+> **CTRL + 1** - predefinied "Easy" difficulty
+
+> **CTRL + 2** - predefined "Medium" difficulty
+
+> **CTRL + 3** - predefined "Hard" difficulty
+
 Project is still incomplete. All todos can be found <a href="https://github.com/malciin/minesweeper/projects/3">here</a>.
 
 ### License: MIT License
