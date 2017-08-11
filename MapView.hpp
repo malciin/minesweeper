@@ -35,7 +35,7 @@ public:
 	virtual void reload();							// Reloading view (check IMapView description for more)
 	///...................
 
-	void setMarginBetweenSquares(int size);			// set the margin between the squares
+	void setMarginBetweenSquares(unsigned int size);			// set the margin between the squares
 	void setSquareSize(int size);					// set the square size
 
 	void setMainColor(sf::Color color);
@@ -59,7 +59,7 @@ public:
 // INLINE METHODS
 ///..............
 
-inline void MapView::setMarginBetweenSquares(int size)
+inline void MapView::setMarginBetweenSquares(unsigned int size)
 {
 	margin = size;
 }

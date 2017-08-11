@@ -15,8 +15,8 @@ public:
 	Minesweeper() : map(20,30, 2)
 	{
 		mapView.handleMap(&map);
-		mapView.setMarginBetweenSquares(2);
-		mapView.setSquareSize(25);
+		mapView.setMarginBetweenSquares(1);
+		mapView.setSquareSize(10);
 		mapView.setMainColor(sf::Color::Blue);
 		mapView.reload();
 
@@ -40,8 +40,8 @@ public:
 				
 				if (event.type == event.Resized)
 				{
-					int sizeX = window->getSize().x / (mapView.getMargin() + mapView.getSquareSize()) + 1;
-					int sizeY = window->getSize().y / (mapView.getMargin() + mapView.getSquareSize()) + 1;
+					int sizeX = window->getSize().x / (mapView.getMargin() + mapView.getSquareSize()) + int(mapView.getMargin() > 0);
+					int sizeY = window->getSize().y / (mapView.getMargin() + mapView.getSquareSize()) + int(mapView.getMargin() > 0);
 					if (sizeX != map.getSizeX() || sizeY != map.getSizeY())
 					{
 						map.setSize(sizeY, sizeX, mapController.getNextMineNumber());

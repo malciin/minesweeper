@@ -1,6 +1,5 @@
 #include "Map.hpp"
 #include <sstream>	// toString
-
 #include <iomanip>	// toString
 #include <set>		// revealIterative
 
