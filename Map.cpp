@@ -62,7 +62,6 @@ void Map::generateMap(int seed)
 		
 		int Y = availableTiles[pos].first;
 		int X = availableTiles[pos].second;
-		std::cout << "Putting mine at " << X << " " << Y << " pos!\n";
 
 		availableTiles[pos] = availableTiles[availableTiles.size() - 1];
 		availableTiles.pop_back();
@@ -80,8 +79,6 @@ void Map::generateMap(int seed)
 			map[y][x].setStatus(Tile::HIDDEN);
 			map[y][x].setMarkStatus(Tile::NOTHING);
 		}
-	
-	std::cout << "Map generated with " << mineTiles << " mines!\n";
 }
 void Map::mark(int y, int x)
 {
@@ -136,9 +133,6 @@ void Map::setSize(int y, int x, int bombs)
 void Map::setMineNumber(int number)
 {
 	mineTiles = number;
-	std::cout << "New mine tiles: " << mineTiles << " " << number << "\n";
-	generateMap();
-	view->reload();
 }
 
 void Map::reveal(int y, int x)

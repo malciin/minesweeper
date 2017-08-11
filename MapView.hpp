@@ -5,12 +5,13 @@
 class MapView : public IMapView, public sf::Drawable
 {
 	Map * mapHandler;
-	Notification * notificationHandler;
 	sf::VertexArray squares;
 	sf::Color mainColor;
 	
 	int squareSize;
 	int margin;
+
+	Notification notification;
 
 	sf::Font font;
 	sf::Texture textures;
@@ -36,7 +37,7 @@ public:
 	///...................
 
 	void setMarginBetweenSquares(unsigned int size);			// set the margin between the squares
-	void setSquareSize(int size);					// set the square size
+	void setSquareSize(int size);								// set the square size
 
 	void setMainColor(sf::Color color);
 
@@ -51,6 +52,9 @@ public:
 	void removeFocus();
 	void addFocus();
 	void addToFocusBuffor(const sf::Vector2i & vector);
+
+	void popup(const std::string & str, int msDuration);
+	void hideNotifications();
 };
 
 
@@ -100,4 +104,14 @@ inline int MapView::getMargin()
 inline void MapView::addToFocusBuffor(const sf::Vector2i & vector)
 {
 	focusBuffor.push(vector);
+}
+
+inline void MapView::popup(const std::string & str, int msDuration)
+{
+	notification.popupNotification(str, msDuration);
+}
+
+inline void MapView::hideNotifications()
+{
+	notification.hide();
 }

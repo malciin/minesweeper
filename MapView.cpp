@@ -9,6 +9,8 @@ MapView::MapView() : focusBuffor(10)
 {
 	squares.setPrimitiveType(sf::PrimitiveType::Quads);
 	font.loadFromMemory(HARDPIXEL_FONT_RAW, sizeof(HARDPIXEL_FONT_RAW));
+	notification.setFont(font);
+	notification.setColor(sf::Color::White, sf::Color(0,0,0,200));
 }
 
 void MapView::renderTextures()
@@ -159,6 +161,8 @@ void MapView::reload()
 			quad[2].position = sf::Vector2f((x + 1)*squareSize + x*margin, (y + 1)*squareSize + y*margin);
 			quad[3].position = sf::Vector2f(x*squareSize + x*margin, (y + 1)*squareSize + y*margin);
 		}
+	notification.setPositions(sf::Vector2f(0, getSizeY() / 2), sf::Vector2f(getSizeX(), getSizeY() / 2));
+	notification.setFontSize(squareSize);
 }
 void MapView::notify(int y, int x)
 {
@@ -171,6 +175,7 @@ void MapView::draw(sf::RenderTarget &target, sf::RenderStates states) const
 {
 	states.texture = &textures;
 	target.draw(squares, states);
+	target.draw(notification);
 }
 
 void MapView::removeFocus()
