@@ -16,7 +16,7 @@ public:
 	{
 		mapView.handleMap(&map);
 		mapView.setMarginBetweenSquares(1);
-		mapView.setSquareSize(20);
+		mapView.setSquareSize(25);
 		mapView.setMainColor(sf::Color::Blue);
 		mapView.reload();
 
@@ -37,7 +37,6 @@ public:
 			while (window->pollEvent(event))
 			{
 				// Change the map size when user resize the window
-				
 				if (event.type == event.Resized)
 				{
 					int sizeX = window->getSize().x / (mapView.getMargin() + mapView.getSquareSize()) + int(mapView.getMargin() > 0);
@@ -52,19 +51,22 @@ public:
 						}
 						map.setSize(sizeY, sizeX, nextMines);
 
-						window->setSize(sf::Vector2u(mapView.getSizeX(), mapView.getSizeY()));
-
-						// Proper scaling
-						sf::View changedView(sf::FloatRect(0, 0, mapView.getSizeX(), mapView.getSizeY()));
-						window->setView(changedView);
+						mapView.popup(
+							"Map " + std::to_string(map.getSizeX()) +
+							"x" + std::to_string(map.getSizeY()) + " with " +
+							std::to_string(map.getMineCount()) + " mines generated!", 3000);
 					}
+					window->setSize(sf::Vector2u(mapView.getSizeX(), mapView.getSizeY()));
+
+					// Proper scaling
+					sf::View changedView(sf::FloatRect(0, 0, mapView.getSizeX(), mapView.getSizeY()));
+					window->setView(changedView);
 				}
 				if (event.type == sf::Event::Closed)
 					window->close();
 				mapController.preceedMouse(mouse.getPosition(*window), event);
 				mapController.preceedKeyboard(event);
 			}
-			
 			mapController.continiousMouse(mouse.getPosition(*window));
 			window->clear();
 			window->draw(mapView);

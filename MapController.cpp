@@ -6,12 +6,15 @@ void MapController::preceedMouse(sf::Vector2i clickPos, const sf::Event & event)
 	{
 		if (!mouseDeltaActive)
 			mouseDeltaActive = true;
-		mouseDelta += event.mouseWheel.delta;
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::LControl))
+			mouseDelta += event.mouseWheel.delta * 25;
+		else
+			mouseDelta += event.mouseWheel.delta;
 		if (mouseDelta < 0)
 			mouseDelta = 0;
 		if (mouseDelta > mapHandler->getMineUpperbound())
 			mouseDelta = mapHandler->getMineUpperbound();
-		std::cout << "Next generated map will have " << mouseDelta << "mines!\n";
+		viewHandler->popup("Next generated map will have " + std::to_string(mouseDelta) + "mines!", 3000);
 	}
 	if (event.type == sf::Event::MouseButtonReleased)
 	{
@@ -59,6 +62,7 @@ void MapController::continiousMouse(sf::Vector2i pos)
 {
 	if (sf::Mouse::isButtonPressed(sf::Mouse::Left) || sf::Mouse::isButtonPressed(sf::Mouse::Right))
 	{
+		viewHandler->hideNotifications();
 		viewHandler->removeFocus();
 		if (mapHandler->isWin() || mapHandler->isLose())
 			return;
@@ -114,13 +118,14 @@ void MapController::preceedKeyboard(const sf::Event & event)
 		if (event.key.code == sf::Keyboard::Space)
 		{
 			if (mouseDeltaActive)
-			{
 				mapHandler->setMineNumber(mouseDelta);
-				std::cout << "Generated new!\n";
-				return;
-			}
 			mapHandler->generateMap();
 			viewHandler->reload();
+
+			viewHandler->popup(
+				"Map " + std::to_string(mapHandler->getSizeX()) +
+				"x" + std::to_string(mapHandler->getSizeY()) + " with " +
+				std::to_string(mapHandler->getMineCount()) + " mines generated!", 3000);
 		}
 	}
 }
