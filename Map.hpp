@@ -58,6 +58,7 @@ public:
 	std::string toString();				// Convert map to the string (usefull for std::cout debug)
 
 	int getMineCount();					// Return mine number in the map
+	int getMineUpperbound();			// Return mine upper bound
 	int getSizeX();						// Return sizeX
 	int getSizeY();						// Return sizeY
 
@@ -134,4 +135,9 @@ inline int Map::getMarkStatus(int y, int x)
 	if (y < -1 || x < -1 || y > sizeY || x > sizeX)
 		throw std::out_of_range("Out of range");
 	return map[y + 1][x + 1].getMarkStatus();
+}
+
+inline int Map::getMineUpperbound()
+{
+	return sizeX * sizeY - 1;
 }

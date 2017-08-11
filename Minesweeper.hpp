@@ -12,11 +12,11 @@ class Minesweeper
 
 	sf::Mouse mouse;
 public:
-	Minesweeper() : map(20,30, 2)
+	Minesweeper() : map(20,30, 60)
 	{
 		mapView.handleMap(&map);
 		mapView.setMarginBetweenSquares(1);
-		mapView.setSquareSize(10);
+		mapView.setSquareSize(20);
 		mapView.setMainColor(sf::Color::Blue);
 		mapView.reload();
 
@@ -44,7 +44,13 @@ public:
 					int sizeY = window->getSize().y / (mapView.getMargin() + mapView.getSquareSize()) + int(mapView.getMargin() > 0);
 					if (sizeX != map.getSizeX() || sizeY != map.getSizeY())
 					{
-						map.setSize(sizeY, sizeX, mapController.getNextMineNumber());
+						int nextMines = mapController.getNextMineNumber();
+						if (nextMines > map.getMineUpperbound())
+						{
+							nextMines = map.getMineUpperbound();
+							mapController.setMineNumber(map.getMineUpperbound());
+						}
+						map.setSize(sizeY, sizeX, nextMines);
 
 						window->setSize(sf::Vector2u(mapView.getSizeX(), mapView.getSizeY()));
 

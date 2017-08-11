@@ -22,6 +22,7 @@ public:
 	void handleMap(Map * map)			// Handle the pointer to map
 	{
 		mapHandler = map;
+		mouseDelta = mapHandler->getMineCount();
 	}
 	void handleView(MapView * view)		// Handle the pointer to view
 	{
@@ -31,6 +32,11 @@ public:
 	int getNextMineNumber()
 	{
 		return mouseDelta;
+	}
+
+	void setMineNumber(int mineNumber)
+	{
+		mouseDelta = mineNumber;
 	}
 
 	// Hotkeys

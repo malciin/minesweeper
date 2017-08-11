@@ -9,6 +9,8 @@ void MapController::preceedMouse(sf::Vector2i clickPos, const sf::Event & event)
 		mouseDelta += event.mouseWheel.delta;
 		if (mouseDelta < 0)
 			mouseDelta = 0;
+		if (mouseDelta > mapHandler->getMineUpperbound())
+			mouseDelta = mapHandler->getMineUpperbound();
 		std::cout << "Next generated map will have " << mouseDelta << "mines!\n";
 	}
 	if (event.type == sf::Event::MouseButtonReleased)
