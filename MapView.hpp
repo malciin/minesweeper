@@ -1,11 +1,11 @@
 #pragma once
-#include <SFML/Graphics.hpp>
+#include "Notification.h"
 #include "Map.hpp"
 #include "Buffor.hpp"
 class MapView : public IMapView, public sf::Drawable
 {
 	Map * mapHandler;
-
+	Notification * notificationHandler;
 	sf::VertexArray squares;
 	sf::Color mainColor;
 	

@@ -1,22 +1,30 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 
-class Notification
+class Notification : public sf::Drawable
 {
 	sf::Clock timer;
 	sf::Text text;
 	int msNotificationDuration;
 	sf::Vector2f rightBound;
+
+	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const
+	{
+		if (alive())
+		{
+			target.draw(text);
+		}
+	}
 public:
 	void setFontSize(unsigned int size)
 	{
 		text.setCharacterSize(size);
 	}
-	void setColor(sf::Color & color)
+	void setColor(const sf::Color & color)
 	{
 		text.setColor(color);
 	}
-	void setFont(sf::Font & font)
+	void setFont(const sf::Font & font)
 	{
 		text.setFont(font);
 	}
@@ -31,13 +39,8 @@ public:
 		text.setString(message);
 	}
 
-	bool alive()
+	bool alive() const
 	{
-		return timer.getElapsedTime().asMilliseconds < msNotificationDuration;
-	}
-
-	const sf::Text & getDrawable() const
-	{
-		return text;
+		return timer.getElapsedTime().asMilliseconds() < msNotificationDuration;
 	}
 };

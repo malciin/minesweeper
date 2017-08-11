@@ -1,14 +1,14 @@
 #include "MapView.hpp"
+#include "resources/HARDPIXEL_FONT_RAW.cpp"
 // Constants that represent texture number that identified specific tile
 const int TILE_TEXTURES_COUNT = 12;
 const int MINE_TEXTURE_NUMBER = 9;
 const int GOOD_MARK_NUMBER = 10;
 const int WRONG_MARK_NUMBER = 11;
-
 MapView::MapView() : focusBuffor(10)
 {
 	squares.setPrimitiveType(sf::PrimitiveType::Quads);
-	font.loadFromFile("ubuntu.ttf");
+	font.loadFromMemory(HARDPIXEL_FONT_RAW, sizeof(HARDPIXEL_FONT_RAW));
 }
 
 void MapView::renderTextures()
@@ -20,8 +20,8 @@ void MapView::renderTextures()
 	sf::Text text;
 	text.setFont(font);
 	text.setColor(sf::Color::Black);
+	
 	text.setCharacterSize(squareSize);
-
 
 	// Value tiles from 0 - 8
 	for (int i = 0; i < 9; i++)
@@ -39,7 +39,7 @@ void MapView::renderTextures()
 	}
 	// Mine Tile (9)
 	sf::Texture mineTexture;
-	mineTexture.loadFromFile("mine.png");
+	mineTexture.loadFromFile("resources/mine.png");
 	sf::Sprite mine;
 	mine.setTexture(mineTexture);
 	mine.setScale(sf::Vector2f(squareSize / 300.0, squareSize / 300.0));
