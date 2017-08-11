@@ -1,5 +1,5 @@
 # Minesweeper SFML
-<img src="https://drive.google.com/uc?export=view&id=0B84Fb42SRsObbzJYRWFBSlJlOGs" />
+<img src="https://drive.google.com/uc?export=view&id=0B84Fb42SRsObOWgtZVd1bmpJUG8" />
 
 ## Info
 * Using SFML v2.4.2
