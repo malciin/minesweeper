@@ -48,11 +48,25 @@ void Map::generateMap(int seed)
 
 	// Place bombs
 	int bombsPlaced = 0;
+	if (mineTiles > hiddenTiles -1 )
+	{
+		mineTiles = hiddenTiles - 1;
+	}
+	std::vector<std::pair<int, int>> availableTiles;
+	for (int i = 0; i < sizeY; i++)
+		for (int j = 0; j < sizeX; j++)
+			availableTiles.push_back(std::pair<int, int>(i + 1, j + 1));
+	
 	while (bombsPlaced != mineTiles)
 	{
-		int Y = std::rand() % (sizeY) + 1;
-		int X = std::rand() % (sizeX) + 1;
+		int pos = std::rand() % availableTiles.size();
+		
+		int Y = availableTiles[pos].first;
+		int X = availableTiles[pos].second;
+		std::cout << "Putting mine at " << X << " " << Y << " pos!\n";
 
+		availableTiles[pos] = availableTiles[availableTiles.size() - 1];
+		availableTiles.pop_back();
 		if (map[Y][X] == Tile::MINE)
 			continue;
 		
@@ -67,6 +81,8 @@ void Map::generateMap(int seed)
 			map[y][x].setStatus(Tile::HIDDEN);
 			map[y][x].setMarkStatus(Tile::NOTHING);
 		}
+	
+	std::cout << "Map generated with " << mineTiles << " mines!\n";
 }
 void Map::mark(int y, int x)
 {
@@ -107,6 +123,8 @@ void Map::setSize(int y, int x, int bombs)
 	lose = false;
 	win = false;
 
+	for (int i = 0; i < map.size(); i++)
+		map[i].clear();
 	map.clear();
 	map.resize(sizeY + 2);
 	for (int y = 0; y < sizeY + 2; y++)
