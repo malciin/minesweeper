@@ -13,13 +13,14 @@ Map::Map(int sizeY, int sizeX, int mines)
 	map.resize(sizeY + 2);
 	for (int y = 0; y < sizeY + 2; y++)
 		map[y].resize(sizeX + 2);
-			
 
+	lastGameTime = 0.f;
 	generateMap();
 }
 
 void Map::generateMap(int seed)
 {
+	gameStart = false;
 	srand(seed);
 	markedTiles = 0;
 	hiddenTiles = sizeX * sizeY;
@@ -137,6 +138,11 @@ void Map::setMineNumber(int number)
 
 void Map::reveal(int y, int x)
 {
+	if (!gameStart)
+	{
+		gameTimer.restart();
+		gameStart = true;
+	}
 	// INCREMENTED BECAUSE OF ADDITIONAL SIZE (TILE::BORDER) OF MAP
 	y++;
 	x++;
@@ -220,6 +226,7 @@ void Map::revealDoubleClick(int y, int x)
 
 void Map::revealAllBombs()
 {
+	lastGameTime = gameTimer.getElapsedTime().asSeconds();
 	for (int y = 1; y <= sizeY; y++)
 		for (int x = 1; x <= sizeX; x++)
 		{

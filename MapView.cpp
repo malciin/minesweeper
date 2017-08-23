@@ -12,7 +12,7 @@ MapView::MapView() : focusBuffor(10)
 	notification.setFont(font);
 	notification.setColor(sf::Color::White, sf::Color(0,0,0,200));
 
-	notification.setFontSize(14);
+	notification.setFontSize(fontSize);
 }
 
 void MapView::renderTextures()
@@ -163,7 +163,7 @@ void MapView::reload()
 			quad[2].position = sf::Vector2f((x + 1)*squareSize + x*margin, (y + 1)*squareSize + y*margin);
 			quad[3].position = sf::Vector2f(x*squareSize + x*margin, (y + 1)*squareSize + y*margin);
 		}
-	notification.setBoundary(sf::Vector2f(getSizeX(), getSizeY() / 2));
+	notification.setBoundary(sf::Vector2f(getSizeX(), getSizeY()));
 }
 void MapView::notify(int y, int x)
 {
@@ -196,4 +196,9 @@ void MapView::addFocus()
 		sf::Vector2i pos = focusBuffor[i];
 		setColor(pos.y, pos.x, sf::Color(mainColor.r, mainColor.g, mainColor.b, 128));
 	}
+}
+
+void MapView::updateBottomLine()
+{
+	notification.update(mapHandler->getGameTime(), mapHandler->getRemainMines());
 }

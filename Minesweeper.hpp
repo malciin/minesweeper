@@ -11,6 +11,8 @@ class Minesweeper
 	MapController mapController;
 
 	sf::Mouse mouse;
+
+	int downNotificationBarHeight = 10;
 public:
 	Minesweeper() : map(20,30, 60)
 	{
@@ -20,13 +22,15 @@ public:
 		mapView.setMainColor(sf::Color::Blue);
 		mapView.reload();
 
+		downNotificationBarHeight = mapView.getFontSize() + 5;
+
 		map.handleView(&mapView);
 
 		mapController.handleMap(&map);
 		mapController.handleView(&mapView);
 
 		
-		window = new sf::RenderWindow(sf::VideoMode(mapView.getSizeX(), mapView.getSizeY()), "Minesweeper");
+		window = new sf::RenderWindow(sf::VideoMode(mapView.getSizeX(), mapView.getSizeY() + downNotificationBarHeight), "Minesweeper");
 		window->setFramerateLimit(60);
 	}
 	void mainLoop()
@@ -39,8 +43,8 @@ public:
 				// Change the map size when user resize the window
 				if (event.type == event.Resized)
 				{
-					int sizeX = window->getSize().x / (mapView.getMargin() + mapView.getSquareSize()) + int(mapView.getMargin() > 0);
-					int sizeY = window->getSize().y / (mapView.getMargin() + mapView.getSquareSize()) + int(mapView.getMargin() > 0);
+					int sizeX = (window->getSize().x - downNotificationBarHeight) / (mapView.getMargin() + mapView.getSquareSize()) + int(mapView.getMargin() > 0);
+					int sizeY = (window->getSize().y - downNotificationBarHeight) / (mapView.getMargin() + mapView.getSquareSize()) + int(mapView.getMargin() > 0);
 					if (sizeX != map.getSizeX() || sizeY != map.getSizeY())
 					{
 						int nextMines = mapController.getNextMineNumber();
@@ -56,10 +60,10 @@ public:
 							"x" + std::to_string(map.getSizeY()) + " with " +
 							std::to_string(map.getMineCount()) + " mines generated!", 3000);
 					}
-					window->setSize(sf::Vector2u(mapView.getSizeX(), mapView.getSizeY()));
+					window->setSize(sf::Vector2u(mapView.getSizeX(), mapView.getSizeY() + downNotificationBarHeight));
 
 					// Proper scaling
-					sf::View changedView(sf::FloatRect(0, 0, mapView.getSizeX(), mapView.getSizeY()));
+					sf::View changedView(sf::FloatRect(0, 0, window->getSize().x, window->getSize().y));
 					window->setView(changedView);
 				}
 				if (event.type == sf::Event::Closed)
@@ -68,6 +72,9 @@ public:
 				mapController.preceedKeyboard(event);
 			}
 			mapController.continiousMouse(mouse.getPosition(*window));
+
+			mapView.updateBottomLine();
+			std::cout << "Last game time: " << map.getGameTime() << "\n";
 			window->clear();
 			window->draw(mapView);
 			window->display();

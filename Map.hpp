@@ -2,6 +2,7 @@
 #include "Tile.hpp"
 #include <vector>
 #include <string>
+#include <SFML/Graphics.hpp>
 
 // View map interface
 class IMapView
@@ -29,6 +30,8 @@ class Map
 	int markedTiles;	// Number of marked tiles
 	int hiddenTiles;	// Number of hidden tiles
 
+	sf::Clock gameTimer;
+
 	int bombsAround(int y, int x);						// Return number of bombs around tile. 
 														// If that tile is actually a bomb this will return Tile::MINE
 	void checkWin();									// Set the win boolean to true if map is resolved
@@ -39,6 +42,9 @@ class Map
 	void revealAllBombs();								// Reveal all bombs. Call only when user lose or win
 	bool win;
 	bool lose;
+
+	float lastGameTime;
+	bool gameStart = false;
 public:
 	Map(int sizeY, int sizeX, int mines);	// Notice! std::vector<std::vector<Tile>> Y(X) size is 2 more than sizeY(sizeX).
 											// This is to simplify border check (bordes will be equal Tile::BORDER)
@@ -68,6 +74,9 @@ public:
 	int getValue(int y, int x);			// Get value of tile (bombs around, or -1 if tile is a mine)
 	int getStatus(int y, int x);		// Get status of tile (if tile is hidden, marked or revealed)
 	int getMarkStatus(int y, int x);	// Get status of mark (if mark is correct or wrong)
+
+	float getGameTime();
+	int getRemainMines();
 };
 
 // INLINE METHODS
@@ -140,4 +149,16 @@ inline int Map::getMarkStatus(int y, int x)
 inline int Map::getMineUpperbound()
 {
 	return sizeX * sizeY - 1;
+}
+
+inline float Map::getGameTime()
+{
+	if (win || lose || !gameStart)
+		return lastGameTime;
+	return gameTimer.getElapsedTime().asSeconds();
+}
+
+inline int Map::getRemainMines()
+{
+	return mineTiles - markedTiles;
 }

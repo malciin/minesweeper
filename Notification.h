@@ -2,6 +2,7 @@
 #include <SFML/Graphics.hpp>
 #include "Buffor.hpp"
 #include <sstream>
+#include <iomanip>
 class Notification : public sf::Drawable
 {
 	sf::Clock timer;
@@ -9,9 +10,14 @@ class Notification : public sf::Drawable
 
 	sf::Text textPattern;
 
+	sf::Text bottomLineTime;
+	sf::Text bottomLineRemain;
+
 	sf::RectangleShape background;
 	int msNotificationDuration;
 	sf::Vector2f bound;
+
+	float time;
 
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const
 	{
@@ -21,24 +27,33 @@ class Notification : public sf::Drawable
 			for(auto line : row)
 			target.draw(line);
 		}
+		target.draw(bottomLineTime);
+		target.draw(bottomLineRemain);
 	}
 public:
 	void setFontSize(unsigned int size)
 	{
 		textPattern.setCharacterSize(size);
+		bottomLineRemain.setCharacterSize(size);
+		bottomLineTime.setCharacterSize(size);
 	}
 	void setColor(const sf::Color & color, const sf::Color & background)
 	{
 		textPattern.setColor(color);
+		bottomLineRemain.setColor(color);
+		bottomLineTime.setColor(color);
 		this->background.setFillColor(background);
 	}
 	void setFont(const sf::Font & font)
 	{
 		textPattern.setFont(font);
+		bottomLineRemain.setFont(font);
+		bottomLineTime.setFont(font);
 	}
-	void setBoundary(const sf::Vector2f rightBound)
+	void setBoundary(const sf::Vector2f bound)
 	{
-		bound = rightBound;
+		this->bound = bound;
+		bottomLineTime.setPosition(0, bound.y);
 	}
 	void popupNotification(const sf::String & message, int miliSeconds)
 	{
@@ -108,6 +123,17 @@ public:
 	{
 		msNotificationDuration = 0;
 		row.clear();
+	}
+
+	void update(float time, int remainMines)
+	{
+		std::stringstream stream;
+		stream << std::fixed << std::setprecision(4) << time;
+		std::string timeStr = stream.str();
+
+		bottomLineTime.setString("Sec: " + timeStr);
+		bottomLineRemain.setString("Mines: " + std::to_string(remainMines));
+		bottomLineRemain.setPosition(bound.x - bottomLineRemain.getLocalBounds().width, bound.y);
 	}
 
 	bool alive() const

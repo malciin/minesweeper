@@ -10,6 +10,7 @@ class MapView : public IMapView, public sf::Drawable
 	
 	int squareSize;
 	int margin;
+	int fontSize = 18;
 
 	Notification notification;
 
@@ -55,6 +56,10 @@ public:
 
 	void popup(const std::string & str, int msDuration);
 	void hideNotifications();
+
+	void updateBottomLine();
+
+	int getFontSize();
 };
 
 
@@ -114,4 +119,9 @@ inline void MapView::popup(const std::string & str, int msDuration)
 inline void MapView::hideNotifications()
 {
 	notification.hide();
+}
+
+inline int MapView::getFontSize()
+{
+	return fontSize;
 }
