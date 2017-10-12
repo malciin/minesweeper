@@ -74,7 +74,6 @@ public:
 			mapController.continiousMouse(mouse.getPosition(*window));
 
 			mapView.updateBottomLine();
-			std::cout << "Last game time: " << map.getGameTime() << "\n";
 			window->clear();
 			window->draw(mapView);
 			window->display();
