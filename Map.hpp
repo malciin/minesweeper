@@ -3,6 +3,7 @@
 #include <vector>
 #include <string>
 #include <SFML/Graphics.hpp>
+#include <bitset>
 
 // View map interface
 class IMapView
@@ -25,6 +26,9 @@ class Map
 	std::vector<std::vector<Tile>> map;	// Map vector. This have Y(X) size 2 more than sizeY(sizeX) (to take care of border check)
 							
 	int sizeX, sizeY;
+
+	// 4KB for one row
+	std::vector<std::bitset<4096>> revealIterativeMark;
 
 	int mineTiles;		// Number of mines
 	int markedTiles;	// Number of marked tiles

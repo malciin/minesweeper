@@ -2,7 +2,7 @@
 #include <sstream>	// toString
 #include <iomanip>	// toString
 #include <set>		// revealIterative
-
+#include <queue>
 // PUBLIC METHODS:
 Map::Map(int sizeY, int sizeX, int mines)
 {
@@ -15,6 +15,7 @@ Map::Map(int sizeY, int sizeX, int mines)
 		map[y].resize(sizeX + 2);
 
 	lastGameTime = 0.f;
+	revealIterativeMark.resize(sizeY);
 	generateMap();
 }
 
@@ -45,6 +46,10 @@ void Map::generateMap(int seed)
 		for (int x = 1; x < sizeX + 1; x++)
 			map[y][x].setValue(0);
 
+	for (int y = 0; y < sizeY; y++)
+		for (int x = 0; x < sizeX; x++)
+			revealIterativeMark[y][x] = true;
+
 
 	// Place bombs
 	int bombsPlaced = 0;
@@ -53,13 +58,18 @@ void Map::generateMap(int seed)
 		mineTiles = hiddenTiles - 1;
 	}
 	std::vector<std::pair<int, int>> availableTiles;
+
+
+
 	for (int i = 0; i < sizeY; i++)
 		for (int j = 0; j < sizeX; j++)
 			availableTiles.push_back(std::pair<int, int>(i + 1, j + 1));
 	
+	std::cout << "Dostepne miejsca: " << availableTiles.size() << "\n";
+
 	while (bombsPlaced != mineTiles)
 	{
-		int pos = std::rand() % availableTiles.size();
+		int pos = static_cast<long long>((std::rand())*std::rand()) % availableTiles.size();
 		
 		int Y = availableTiles[pos].first;
 		int X = availableTiles[pos].second;
@@ -112,6 +122,7 @@ void Map::mark(int y, int x)
 void Map::setSize(int y, int x, int bombs)
 {
 	sizeY = y;
+	revealIterativeMark.resize(sizeY);
 	sizeX = x;
 	mineTiles = bombs;
 
@@ -175,14 +186,19 @@ void Map::reveal(int y, int x)
 void Map::revealIterative(int y, int x)
 {
 	typedef std::pair<int, int> vector;
-	std::set<vector> points;
-	points.insert(vector(y, x));
+	// std::set<vector> points;
+	// points.insert(vector(y, x));
+	
+	std::queue<vector> points;
+	points.push(vector(y, x));
 	while (!points.empty())
 	{
-		vector actual = *points.begin();
+		//vector actual = *points.begin();
+		vector actual = points.front();
 		int y = actual.first;
 		int x = actual.second;
-		points.erase(points.begin());
+		//points.erase(points.begin());
+		points.pop();
 		
 		if (map[y][x].getStatus() == Tile::MARKED)
 			continue;
@@ -193,11 +209,23 @@ void Map::revealIterative(int y, int x)
 		{
 			for (int yDelta = -1; yDelta < 2; yDelta += 2)
 				if (map[y + yDelta][x].getStatus() != Tile::REVEALED && map[y + yDelta][x] != Tile::BORDER)
-					points.insert(vector(y + yDelta, x));
+					//points.insert(vector(y + yDelta, x));
+					if (revealIterativeMark[y + yDelta-1][x-1])
+					{
+						revealIterativeMark[y + yDelta-1][x-1] = false;
+						points.push(vector(y + yDelta, x));
+					}
+						
 
 			for (int xDelta = -1; xDelta < 2; xDelta += 2)
 				if (map[y][x + xDelta].getStatus() != Tile::REVEALED && map[y][x + xDelta] != Tile::BORDER)
-					points.insert(vector(y, x + xDelta));
+					//points.insert(vector(y, x + xDelta));
+					if (revealIterativeMark[y-1][x + xDelta-1])
+					{
+						revealIterativeMark[y-1][x + xDelta-1] = false;
+						points.push(vector(y, x + xDelta));
+					}
+						
 		}
 		
 	}

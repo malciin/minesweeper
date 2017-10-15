@@ -14,11 +14,11 @@ class Minesweeper
 
 	int downNotificationBarHeight = 10;
 public:
-	Minesweeper() : map(20,30, 60)
+	Minesweeper() : map(100, 100, 10)
 	{
 		mapView.handleMap(&map);
-		mapView.setMarginBetweenSquares(1);
-		mapView.setSquareSize(25);
+		mapView.setMarginBetweenSquares(0);
+		mapView.setSquareSize(10);
 		mapView.setMainColor(sf::Color::Blue);
 		mapView.reload();
 
@@ -43,8 +43,10 @@ public:
 				// Change the map size when user resize the window
 				if (event.type == event.Resized)
 				{
-					int sizeX = (window->getSize().x - downNotificationBarHeight) / (mapView.getMargin() + mapView.getSquareSize()) + int(mapView.getMargin() > 0);
+					int sizeX = (window->getSize().x) / (mapView.getMargin() + mapView.getSquareSize()) + int(mapView.getMargin() > 0);
+					//int sizeX = (window->getSize().x + mapView.getMargin() * 2) / (mapView.getMargin() + mapView.getSquareSize());
 					int sizeY = (window->getSize().y - downNotificationBarHeight) / (mapView.getMargin() + mapView.getSquareSize()) + int(mapView.getMargin() > 0);
+					std::cout << "sizeX: " << sizeX << "==" << map.getSizeX() << "   " << "sizeY: " << sizeY << "== " << map.getSizeY() << "\n";
 					if (sizeX != map.getSizeX() || sizeY != map.getSizeY())
 					{
 						int nextMines = mapController.getNextMineNumber();
