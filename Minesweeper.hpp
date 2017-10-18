@@ -3,10 +3,11 @@
 #include "MapView.hpp"
 #include "MapController.hpp"
 #include <iostream>
+#include "IniFile.hpp"
 class Minesweeper
 {
 	sf::RenderWindow * window;
-	Map map;
+	Map * map;
 	MapView mapView;
 	MapController mapController;
 
@@ -14,24 +15,28 @@ class Minesweeper
 
 	int downNotificationBarHeight = 10;
 public:
-	Minesweeper() : map(100, 100, 10)
+	Minesweeper()
 	{
-		mapView.handleMap(&map);
-		mapView.setMarginBetweenSquares(0);
-		mapView.setSquareSize(10);
+		
+		IniFile config("conf.ini");
+
+		map = new Map(config.getInt("sizeY"), config.getInt("sizeX"), config.getInt("mines"));
+		mapView.handleMap(map);
+		mapView.setMarginBetweenSquares(config.getInt("SquareMargin"));
+		mapView.setSquareSize(config.getInt("SquareSize"));
 		mapView.setMainColor(sf::Color::Blue);
 		mapView.reload();
 
 		downNotificationBarHeight = mapView.getFontSize() + 5;
 
-		map.handleView(&mapView);
+		map->handleView(&mapView);
 
-		mapController.handleMap(&map);
+		mapController.handleMap(map);
 		mapController.handleView(&mapView);
 
 		
 		window = new sf::RenderWindow(sf::VideoMode(mapView.getSizeX(), mapView.getSizeY() + downNotificationBarHeight), "Minesweeper");
-		window->setFramerateLimit(60);
+		window->setFramerateLimit(config.getInt("framerate"));
 	}
 	void mainLoop()
 	{
@@ -46,21 +51,21 @@ public:
 					int sizeX = (window->getSize().x) / (mapView.getMargin() + mapView.getSquareSize()) + int(mapView.getMargin() > 0);
 					//int sizeX = (window->getSize().x + mapView.getMargin() * 2) / (mapView.getMargin() + mapView.getSquareSize());
 					int sizeY = (window->getSize().y - downNotificationBarHeight) / (mapView.getMargin() + mapView.getSquareSize()) + int(mapView.getMargin() > 0);
-					std::cout << "sizeX: " << sizeX << "==" << map.getSizeX() << "   " << "sizeY: " << sizeY << "== " << map.getSizeY() << "\n";
-					if (sizeX != map.getSizeX() || sizeY != map.getSizeY())
+					std::cout << "sizeX: " << sizeX << "==" << map->getSizeX() << "   " << "sizeY: " << sizeY << "== " << map->getSizeY() << "\n";
+					if (sizeX != map->getSizeX() || sizeY != map->getSizeY())
 					{
 						int nextMines = mapController.getNextMineNumber();
-						if (nextMines > map.getMineUpperbound())
+						if (nextMines > map->getMineUpperbound())
 						{
-							nextMines = map.getMineUpperbound();
-							mapController.setMineNumber(map.getMineUpperbound());
+							nextMines = map->getMineUpperbound();
+							mapController.setMineNumber(map->getMineUpperbound());
 						}
-						map.setSize(sizeY, sizeX, nextMines);
+						map->setSize(sizeY, sizeX, nextMines);
 
 						mapView.popup(
-							"Map " + std::to_string(map.getSizeX()) +
-							"x" + std::to_string(map.getSizeY()) + " with " +
-							std::to_string(map.getMineCount()) + " mines generated!", 3000);
+							"Map " + std::to_string(map->getSizeX()) +
+							"x" + std::to_string(map->getSizeY()) + " with " +
+							std::to_string(map->getMineCount()) + " mines generated!", 3000);
 					}
 					window->setSize(sf::Vector2u(mapView.getSizeX(), mapView.getSizeY() + downNotificationBarHeight));
 
