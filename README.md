@@ -1,14 +1,14 @@
 # Minesweeper SFML
-<img src="https://drive.google.com/uc?export=view&id=0B84Fb42SRsObOWgtZVd1bmpJUG8" />
+<img src="https://drive.google.com/uc?export=view&id=1NFeivcaY_-AQ_pP53APEYW232gJ9KuGY" />
 
 ## Info
 * Using SFML v2.4.2
-* Modifiable interface (user can cofig square size, margin between squares, color and font)
 * Resizable window (when user resize window, map change its size too)
-* Double click support
+* Double mouse button pressed support
 * All square textures are rendered once at runtime thus performance is fair due to use <b>sf::VertexArray</b> (even with 500^2 tiles)
 * No recursion when reveal many empty tiles (stack overflow impossible on huge maps)
 * MVC
+* Ini file
 
 ## Controlls
 > **Space** - generate map
