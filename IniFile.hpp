@@ -10,7 +10,6 @@ class IniFile
 {
 	std::string filePath;
 	std::unordered_map<std::string, std::string> container;
-
 	std::ifstream iFile;
 public:
 	IniFile(const char * _filePath) : filePath(_filePath)
@@ -47,11 +46,16 @@ public:
 		iFile.close();
 	}
 
-	std::string get(std::string key)
+	std::string getRaw(std::string key)
 	{
 		if (container.find(key) == container.end())
 			throw std::logic_error("Value " + key + " not found!");
 		return container[key];
+	}
+
+	std::string getString(std::string key)
+	{
+		return getRaw(key);
 	}
 
 	bool getBool(std::string key)

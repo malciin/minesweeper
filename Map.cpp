@@ -65,7 +65,6 @@ void Map::generateMap(int seed)
 		for (int j = 0; j < sizeX; j++)
 			availableTiles.push_back(std::pair<int, int>(i + 1, j + 1));
 	
-	std::cout << "Dostepne miejsca: " << availableTiles.size() << "\n";
 
 	while (bombsPlaced != mineTiles)
 	{
